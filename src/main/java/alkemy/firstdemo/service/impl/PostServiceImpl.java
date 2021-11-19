@@ -3,11 +3,14 @@ package alkemy.firstdemo.service.impl;
 import alkemy.firstdemo.model.PostEntity;
 import alkemy.firstdemo.repository.PostRepository;
 import alkemy.firstdemo.service.PostService;
-import javassist.NotFoundException;
+import alkemy.firstdemo.service.exception.IdNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+
 @Service
 public class PostServiceImpl implements PostService {
 
@@ -30,29 +33,40 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostEntity getById(Long id){
-        return postRepository.findById(id).get();
+    public PostEntity getById(Long id) throws IdNotFoundException {
+        try {
+            return postRepository.findById(id).get();
+        }catch (NoSuchElementException ex){
+            throw  new IdNotFoundException("",id);
+        }
     }
 
     @Override
     public PostEntity save(PostEntity post) {
-
         return postRepository.save(post);
     }
 
     @Override
     public PostEntity update(PostEntity post) {
         return postRepository.save(post);
-
     }
 
     @Override
-    public void delete(Long id) throws NotFoundException {
-        postRepository.deleteById(id);
+    public void delete(Long id) throws EmptyResultDataAccessException {
+        try {
+            postRepository.deleteById(id);
+        }catch (EmptyResultDataAccessException ex){
+            throw new IdNotFoundException("",id);
+        }
     }
 
     @Override
     public void deleteAll() {
         postRepository.deleteAll();
+    }
+
+    @Override
+    public List<PostEntity> getAll() {
+        return postRepository.findAll();
     }
 }

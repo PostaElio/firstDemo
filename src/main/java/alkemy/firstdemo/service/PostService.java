@@ -1,7 +1,7 @@
 package alkemy.firstdemo.service;
 
 import alkemy.firstdemo.model.PostEntity;
-import javassist.NotFoundException;
+import alkemy.firstdemo.service.exception.IdNotFoundException;
 
 import java.util.List;
 
@@ -13,14 +13,15 @@ public interface PostService {
 
     List<PostEntity> getAllByTitleAndCategory(String title, String category);
 
-    PostEntity getById(Long id) throws NotFoundException;
+    PostEntity getById(Long id) throws IdNotFoundException;
 
     PostEntity save(PostEntity post);
 
     PostEntity update(PostEntity post);
 
-    void delete(Long id) throws NotFoundException;
+    void delete(Long id) throws IdNotFoundException;
 
     void deleteAll();
 
+    List<PostEntity> getAll();
 }

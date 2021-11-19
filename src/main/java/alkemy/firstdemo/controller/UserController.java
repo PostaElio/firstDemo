@@ -9,11 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -32,26 +30,18 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<ApiResponse> authenticate(@RequestBody UserEntity user) {
-        try {
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            user.getEmail(),
-                            user.getPassword()
-                    )
-            );
-        } catch (BadCredentialsException e) {
-            return new ResponseEntity<>(new ApiResponse(false,"Invalid password or username"), HttpStatus.BAD_REQUEST);
-        }
-        final UserDetails userDetails = userService.loadUserByUsername(user.getEmail());
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        user.getEmail(),
+                        user.getPassword()
+                ));
+        userService.loadUserByUsername(user.getEmail());
         final String token = getJWTToken(user.getEmail());
         return new ResponseEntity<>(new ApiResponse(true,token),HttpStatus.OK);
     }
 
     @RequestMapping(value = "/sign_up", method = RequestMethod.POST)
     public ResponseEntity<ApiResponse> saveUser(@RequestBody UserEntity user) {
-        if (userService.existsWithEmail(user.getEmail())) {
-            return new ResponseEntity<>(new ApiResponse(false,"Email is already taken"),HttpStatus.BAD_REQUEST);
-        }
         userService.save(user);
         return new ResponseEntity<>(new ApiResponse(true,"User registered successfully"),HttpStatus.OK);
     }

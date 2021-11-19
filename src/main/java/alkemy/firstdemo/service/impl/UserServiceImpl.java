@@ -3,6 +3,8 @@ package alkemy.firstdemo.service.impl;
 import alkemy.firstdemo.model.UserEntity;
 import alkemy.firstdemo.repository.UserRepository;
 import alkemy.firstdemo.service.UserService;
+import alkemy.firstdemo.service.exception.EmptyInputException;
+import alkemy.firstdemo.service.exception.ExistsByEmailException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.userdetails.User;
@@ -32,17 +34,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserEntity save(UserEntity user) throws DataIntegrityViolationException {
-        try {
-            user.setPassword(bcryptEncoder.encode(user.getPassword()));
-            return userRepository.save(user);
-        }catch (DataIntegrityViolationException ex){
-            throw new DataIntegrityViolationException("The email is already taken.");
+    public UserEntity save(UserEntity user) throws DataIntegrityViolationException, ExistsByEmailException {
+        String email = user.getEmail();
+        String password = user.getPassword();
+        if(userRepository.existsByEmail(user.getEmail())){
+            throw new ExistsByEmailException(user.getEmail());
         }
-    }
-    @Override
-    public boolean existsWithEmail(String email) {
-        return userRepository.existsByEmail(email);
+        if (email.length() == 0 || password.length() == 0 || email.equals(null) || password.equals(null) ) {
+            throw new EmptyInputException("User");
+        }
+        user.setPassword(bcryptEncoder.encode(user.getPassword()));
+        return userRepository.save(user);
     }
 
     @Override

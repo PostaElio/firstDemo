@@ -30,7 +30,6 @@ public class PostEntity {
     @Column(nullable = false)
     private Date creationdate;
     @ManyToOne
-    //@JoinColumn(name="author_id",referencedColumnName = "id", insertable = false,updatable = false)
     private UserEntity author;
 
     public PostEntity(String title, String content, String image, String category, Date creationdate, UserEntity author) {
