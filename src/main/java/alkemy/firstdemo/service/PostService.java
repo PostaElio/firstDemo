@@ -15,9 +15,9 @@ public interface PostService {
 
     PostEntity getById(Long id) throws IdNotFoundException;
 
-    PostEntity save(PostEntity post);
+    PostEntity save(PostEntity post) throws IdNotFoundException;
 
-    PostEntity update(PostEntity post);
+    PostEntity update(PostEntity post) throws IdNotFoundException;
 
     void delete(Long id) throws IdNotFoundException;
 

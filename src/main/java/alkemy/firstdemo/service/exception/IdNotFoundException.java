@@ -8,14 +8,16 @@ public class IdNotFoundException extends RuntimeException{
     private static final long serialVersionUID = 1L;
     private Long idNotFound;
     private String errorCode;
+    private String typeInString;
 
-    public IdNotFoundException(String errorCode,Long idNotFound) {
+    public IdNotFoundException(String errorCode,Long idNotFound,String typeInString) {
         this.idNotFound = idNotFound;
         this.errorCode = errorCode;
+        this.typeInString = typeInString;
     }
 
     @Override
     public String getMessage() {
-        return "Post with id "+this.idNotFound+" not exists in database";
+        return this.typeInString+" with id "+this.idNotFound+" not exists in database";
     }
 }

@@ -34,11 +34,12 @@ public class PostController {
     @PutMapping("/{movieId}/character/{characterId}")
     public ResponseEntity<ApiResponse> addCharacterToMovie(@PathVariable Long movieId, @PathVariable Long characterId) {
         try {/posts?titulo=TITULO&category=CATEGORY
-     */
-    @GetMapping("/{titulo}")
+
+      @GetMapping(params = "title")
     public ResponseEntity<List<PostCompactResponse>> getAllByTitleAndCategory(@RequestParam("category") String category) {
         return new ResponseEntity<>(toPostCompactResponse(postService.getAllByCategory(category)), HttpStatus.OK);
     }
+*/
     private List<PostCompactResponse> toPostCompactResponse(List<PostEntity> postEntities) {
         ModelMapper modelMapper = new ModelMapper();
         return postEntities
@@ -49,11 +50,11 @@ public class PostController {
 
     @GetMapping(path = "/{id}")
     public ResponseEntity<PostEntity> getById(@PathVariable("id") Long id) {
-        return new ResponseEntity<>(postService.getById(id), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(postService.getById(id), HttpStatus.OK);
     }
 
     @PostMapping()
-    public ResponseEntity<PostEntity> save(@RequestBody PostEntity postEntity) {
+    public ResponseEntity<PostEntity> save(@RequestBody PostEntity postEntity) throws Exception {
         return new ResponseEntity<>(postService.save(postEntity), HttpStatus.OK);
     }
 

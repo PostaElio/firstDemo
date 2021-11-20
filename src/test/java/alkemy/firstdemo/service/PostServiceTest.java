@@ -88,8 +88,24 @@ class PostServiceTest {
     }
 
     @Test
+    void trySaveWithIdFromUserNotExists(){
+        UserEntity user = new UserEntity();
+        user.setId(132*321+10L);
+        post1.setAuthor(user);
+        assertThrows(IdNotFoundException.class, () -> postService.save(post1));
+    }
+
+    @Test
     void update() {
-        //?????
+        post1.setTitle("Este titulo me gusta mucho mas");
+        postService.update(post1);
+        assertEquals("Este titulo me gusta mucho mas", postService.getById(post1.getId()).getTitle());
+    }
+    @Test
+    void tryUpdateIdNotExists() {
+        post1.setTitle("Este titulo me gusta mucho mas");
+        post1.setId(123*321+10L);
+        assertThrows(IdNotFoundException.class , () -> postService.update(post1));
     }
 
     @Test

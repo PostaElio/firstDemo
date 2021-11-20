@@ -1,10 +1,12 @@
 package alkemy.firstdemo.controller;
 
 import alkemy.firstdemo.controller.dto.ApiResponse;
+import alkemy.firstdemo.controller.dto.UserRequest;
 import alkemy.firstdemo.model.UserEntity;
 import alkemy.firstdemo.service.UserService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,20 +31,22 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse> authenticate(@RequestBody UserEntity user) {
+    public ResponseEntity<ApiResponse> authenticate(@RequestBody UserRequest user) {
+        userService.loadUserByUsername(user.getEmail());
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         user.getEmail(),
                         user.getPassword()
                 ));
-        userService.loadUserByUsername(user.getEmail());
         final String token = getJWTToken(user.getEmail());
         return new ResponseEntity<>(new ApiResponse(true,token),HttpStatus.OK);
     }
 
     @RequestMapping(value = "/sign_up", method = RequestMethod.POST)
-    public ResponseEntity<ApiResponse> saveUser(@RequestBody UserEntity user) {
-        userService.save(user);
+    public ResponseEntity<ApiResponse> saveUser(@RequestBody UserRequest user) {
+        ModelMapper modelMapper = new ModelMapper();
+
+        userService.save(modelMapper.map(user,UserEntity.class));
         return new ResponseEntity<>(new ApiResponse(true,"User registered successfully"),HttpStatus.OK);
     }
 

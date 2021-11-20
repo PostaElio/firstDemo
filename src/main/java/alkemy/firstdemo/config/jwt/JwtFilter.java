@@ -37,10 +37,11 @@ public class JwtFilter extends OncePerRequestFilter {
             }
             chain.doFilter(request, response);
         } catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException | SignatureException e) {
-            /* Como se hace para que cuando ocurran estas excepciones se lance un mensaje como respuesta a nivel api
+            //Como se hace para que cuando ocurran estas excepciones se lance un mensaje como respuesta a nivel api
+            System.out.println("holaaaaa");
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             ((HttpServletResponse) response).sendError(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
-            return;*/
+            return;
         }
     }
 

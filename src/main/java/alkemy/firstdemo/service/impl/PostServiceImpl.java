@@ -37,26 +37,32 @@ public class PostServiceImpl implements PostService {
         try {
             return postRepository.findById(id).get();
         }catch (NoSuchElementException ex){
-            throw  new IdNotFoundException("",id);
+            throw  new IdNotFoundException("",id,"Post");
         }
     }
 
     @Override
-    public PostEntity save(PostEntity post) {
-        return postRepository.save(post);
+    public PostEntity save(PostEntity post) throws IdNotFoundException{
+        try {
+            return postRepository.save(post);
+        }catch (Exception ex){
+            throw new IdNotFoundException("",post.getAuthor().getId(),"Author");
+        }
     }
 
     @Override
-    public PostEntity update(PostEntity post) {
+    public PostEntity update(PostEntity post) throws IdNotFoundException{
+        if(!postRepository.existsById(post.getId())){
+            throw new IdNotFoundException("",post.getId(),"Post");
+        }
         return postRepository.save(post);
     }
-
     @Override
     public void delete(Long id) throws EmptyResultDataAccessException {
         try {
             postRepository.deleteById(id);
         }catch (EmptyResultDataAccessException ex){
-            throw new IdNotFoundException("",id);
+            throw new IdNotFoundException("",id,"Post");
         }
     }
 
