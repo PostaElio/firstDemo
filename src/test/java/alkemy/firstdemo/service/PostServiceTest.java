@@ -96,19 +96,6 @@ class PostServiceTest {
     }
 
     @Test
-    void update() {
-        post1.setTitle("Este titulo me gusta mucho mas");
-        postService.update(post1);
-        assertEquals("Este titulo me gusta mucho mas", postService.getById(post1.getId()).getTitle());
-    }
-    @Test
-    void tryUpdateIdNotExists() {
-        post1.setTitle("Este titulo me gusta mucho mas");
-        post1.setId(123*321+10L);
-        assertThrows(IdNotFoundException.class , () -> postService.update(post1));
-    }
-
-    @Test
     void delete() {
         assertEquals(3,postService.getAll().size());
         postService.delete(post1.getId());

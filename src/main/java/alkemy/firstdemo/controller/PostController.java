@@ -8,9 +8,12 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -29,17 +32,14 @@ public class PostController {
     public ResponseEntity<List<PostCompactResponse>> getAllByCategory(@RequestParam("category") String category) {
         return new ResponseEntity<>(toPostCompactResponse(postService.getAllByCategory(category)), HttpStatus.OK);
     }
-
-    /*/movies/220/character/184
-    @PutMapping("/{movieId}/character/{characterId}")
-    public ResponseEntity<ApiResponse> addCharacterToMovie(@PathVariable Long movieId, @PathVariable Long characterId) {
-        try {/posts?titulo=TITULO&category=CATEGORY
-
-      @GetMapping(params = "title")
-    public ResponseEntity<List<PostCompactResponse>> getAllByTitleAndCategory(@RequestParam("category") String category) {
-        return new ResponseEntity<>(toPostCompactResponse(postService.getAllByCategory(category)), HttpStatus.OK);
+    //No funciona
+    @GetMapping(params ="title & category")
+    public ResponseEntity<List<PostCompactResponse>> getAllByTitleAndCategory(
+            @RequestParam("title") String title,
+            @RequestParam("category") String category) {
+        return new ResponseEntity<>(toPostCompactResponse(postService.getAllByTitleAndCategory(title,category)), HttpStatus.OK);
     }
-*/
+
     private List<PostCompactResponse> toPostCompactResponse(List<PostEntity> postEntities) {
         ModelMapper modelMapper = new ModelMapper();
         return postEntities
@@ -54,11 +54,20 @@ public class PostController {
     }
 
     @PostMapping()
-    public ResponseEntity<PostEntity> save(@RequestBody PostEntity postEntity) throws Exception {
+    public ResponseEntity<PostEntity> save(@RequestBody PostEntity postEntity) {
         return new ResponseEntity<>(postService.save(postEntity), HttpStatus.OK);
     }
 
-    //PostEntity update(PostEntity post);
+    @PatchMapping(path = "/{id}")
+    public ResponseEntity<PostEntity> update(@PathVariable("id") Long id, @RequestBody Map<Object,Object> map) {
+        PostEntity postEntity = postService.getById(id);
+        map.forEach((key,value) -> {
+            Field field = ReflectionUtils.findField(PostEntity.class, (String) key);
+            field.setAccessible(true);
+            ReflectionUtils.setField(field,postEntity,value);
+        });
+        return new ResponseEntity<>(postService.save(postEntity), HttpStatus.OK);
+    }
 
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<ApiResponse> delete(@PathVariable("id") Long id) {

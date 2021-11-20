@@ -32,12 +32,12 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<ApiResponse> authenticate(@RequestBody UserRequest user) {
-        userService.loadUserByUsername(user.getEmail());
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         user.getEmail(),
                         user.getPassword()
                 ));
+        userService.loadUserByUsername(user.getEmail());
         final String token = getJWTToken(user.getEmail());
         return new ResponseEntity<>(new ApiResponse(true,token),HttpStatus.OK);
     }

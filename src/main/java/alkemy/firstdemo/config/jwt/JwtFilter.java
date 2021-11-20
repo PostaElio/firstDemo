@@ -37,8 +37,8 @@ public class JwtFilter extends OncePerRequestFilter {
             }
             chain.doFilter(request, response);
         } catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException | SignatureException e) {
-            //Como se hace para que cuando ocurran estas excepciones se lance un mensaje como respuesta a nivel api
-            System.out.println("holaaaaa");
+            //Como se hace para que se lance un mensaje como respuesta a nivel api cuando ocurran estas excepciones
+            System.out.println("Try with other token");
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             ((HttpServletResponse) response).sendError(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
             return;

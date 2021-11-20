@@ -15,6 +15,7 @@ public class UserEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long id;
+    @JsonIgnore
     @Column(nullable = false, unique = true)
     private String email;
     @JsonIgnore

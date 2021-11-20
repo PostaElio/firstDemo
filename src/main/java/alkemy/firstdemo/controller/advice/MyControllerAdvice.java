@@ -17,7 +17,7 @@ public class MyControllerAdvice {
 
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<ApiResponse> handleBadCredentials(BadCredentialsException badCredentialsException){
-        return new ResponseEntity<>(new ApiResponse(false,"Invalid password or username"), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new ApiResponse(false,badCredentialsException.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(ExistsByEmailException.class)
@@ -43,5 +43,10 @@ public class MyControllerAdvice {
     @ExceptionHandler(ExpiredJwtException.class)
     public ResponseEntity<ApiResponse> handleExpiredJwt(ExpiredJwtException expiredJwtException){
         return new ResponseEntity<>(new ApiResponse(false,expiredJwtException.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(NullPointerException.class)
+    public ResponseEntity<ApiResponse> handleNullPointerException(NullPointerException nullPointerException){
+        return new ResponseEntity<>(new ApiResponse(false,"Any atributes are not exists for the object"), HttpStatus.BAD_REQUEST);
     }
 }
