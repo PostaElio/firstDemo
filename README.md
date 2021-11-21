@@ -4,6 +4,8 @@ Proyecto con Usuarios que pueden publicar post y aplicar mensajes CRUD(con Soft 
 hacer consultas para obtener todos los post con un titulo o categoria especifica. 
 Ademas un usuario obtiene su token cuando inicia sesion, para poder hacer peticiones HTTP a diferentes endpoint. 
 
+La API cuenta con respuestas a excepciones ubicadas en el [archivo](https://github.com/PostaElio/firstDemo/blob/main/src/main/java/alkemy/firstdemo/controller/advice/MyControllerAdvice.java).
+
 El proyecto fue testeado con JUnit y la documentacion fue realizada en [Postman](https://documenter.getpostman.com/view/16938604/UVJWqKw2).
 
 ### Dependencies
