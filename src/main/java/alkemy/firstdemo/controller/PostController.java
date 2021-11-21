@@ -72,12 +72,12 @@ public class PostController {
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<ApiResponse> delete(@PathVariable("id") Long id) {
         postService.softDelete(id);
-        return new ResponseEntity<>(new ApiResponse(Boolean.TRUE, "Movie with id " + id + " is deleted"), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse(true, "Post with id " + id + " is deleted"), HttpStatus.OK);
     }
 
     @DeleteMapping()
     public ResponseEntity<ApiResponse> deleteAll() {
         postService.deleteAll();
-        return new ResponseEntity<>(new ApiResponse(Boolean.TRUE, "All post were deleted"), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse(true, "All post were deleted"), HttpStatus.OK);
     }
 }

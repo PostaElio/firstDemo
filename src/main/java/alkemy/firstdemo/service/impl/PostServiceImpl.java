@@ -52,8 +52,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void softDelete(Long id) throws IdNotFoundException {
-        //Esto nos sirve para diga que no existe un Post con el id dado si es que ya tiene softDelete y
-        // tambien para que de una excepcion si es que no existe un post con el id
+        //Esto nos sirve para diga que no existe un Post con el id dado si es que ya tiene softDelete
         this.getById(id);
         postRepository.softDelete(id);
     }
