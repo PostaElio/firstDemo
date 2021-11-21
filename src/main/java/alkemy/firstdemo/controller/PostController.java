@@ -32,8 +32,8 @@ public class PostController {
     public ResponseEntity<List<PostCompactResponse>> getAllByCategory(@RequestParam("category") String category) {
         return new ResponseEntity<>(toPostCompactResponse(postService.getAllByCategory(category)), HttpStatus.OK);
     }
-    //No funciona
-    @GetMapping(params ="title & category")
+
+    @GetMapping(params = {"title", "category"})
     public ResponseEntity<List<PostCompactResponse>> getAllByTitleAndCategory(
             @RequestParam("title") String title,
             @RequestParam("category") String category) {
