@@ -78,6 +78,6 @@ public class PostController {
     @DeleteMapping()
     public ResponseEntity<ApiResponse> deleteAll() {
         postService.deleteAll();
-        return new ResponseEntity<>(new ApiResponse(Boolean.TRUE, "All post are deleted"), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse(Boolean.TRUE, "All post were deleted"), HttpStatus.OK);
     }
 }
