@@ -71,13 +71,13 @@ public class PostController {
 
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<ApiResponse> delete(@PathVariable("id") Long id) {
-        postService.delete(id);
+        postService.softDelete(id);
         return new ResponseEntity<>(new ApiResponse(Boolean.TRUE, "Movie with id " + id + " is deleted"), HttpStatus.OK);
     }
 
     @DeleteMapping()
     public ResponseEntity<ApiResponse> deleteAll() {
         postService.deleteAll();
-        return new ResponseEntity<>(new ApiResponse(Boolean.TRUE, "All Movies are deleted"), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse(Boolean.TRUE, "All post are deleted"), HttpStatus.OK);
     }
 }

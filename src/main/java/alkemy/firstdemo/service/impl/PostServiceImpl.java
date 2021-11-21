@@ -5,7 +5,6 @@ import alkemy.firstdemo.repository.PostRepository;
 import alkemy.firstdemo.service.PostService;
 import alkemy.firstdemo.service.exception.IdNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -52,16 +51,16 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void delete(Long id) throws EmptyResultDataAccessException {
-        try {
-            postRepository.deleteById(id);
-        }catch (EmptyResultDataAccessException ex){
-            throw new IdNotFoundException("",id,"Post");
-        }
+    public void softDelete(Long id) throws IdNotFoundException {
+        //Esto nos sirve para diga que no existe un Post con el id dado si es que ya tiene softDelete y
+        // tambien para que de una excepcion si es que no existe un post con el id
+        this.getById(id);
+        postRepository.softDelete(id);
     }
 
     @Override
     public void deleteAll() {
+        postRepository.softDeleteAll();
         postRepository.deleteAll();
     }
 

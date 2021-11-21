@@ -1,18 +1,17 @@
 package alkemy.firstdemo.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.util.Date;
 
-@AllArgsConstructor
 @NoArgsConstructor
-@Setter
-@Getter
+@Data
+@Where(clause = "softdelete = false" )
 @Entity(name = "posts")
 public class PostEntity {
     @Id
@@ -33,6 +32,9 @@ public class PostEntity {
     private Date creationdate;
     @ManyToOne
     private UserEntity author;
+    @JsonIgnore
+    @Column(name = "softdelete",columnDefinition = "boolean DEFAULT 'false'")
+    private boolean softdelete = false;
 
     public PostEntity(String title, String content, String image, String category, Date creationdate, UserEntity author) {
         this.title = title;

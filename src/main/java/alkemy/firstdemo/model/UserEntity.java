@@ -22,7 +22,7 @@ public class UserEntity {
     @Column(nullable = false)
     private String password;
     @JsonIgnore
-    @OneToMany(targetEntity = PostEntity.class,mappedBy = "author",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @OneToMany(targetEntity = PostEntity.class,mappedBy = "author",cascade = {CascadeType.ALL, CascadeType.MERGE} ,fetch = FetchType.LAZY)
     private Set<PostEntity> posts;
 
     public UserEntity(String email, String password) {
